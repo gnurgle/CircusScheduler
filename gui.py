@@ -44,9 +44,114 @@ def fetchActValues(e):
 	statusBar.configure(text="Loaded " + actCombo.get())
 
 #==================================
-#=         Fetch Act Values
+#=         Fetch Perf Values
 #==================================
 def fetchPerfValues(e):
+
+	conn = sql.connect(dbName)
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM Schedule WHERE perfName = ?",(perfCombo.get(),))
+	rows = cur.fetchall()
+
+	#Checkbox flipper
+	checkSwitcher(M1Check,rows[0][1])
+	checkSwitcher(M2Check,rows[0][2])
+	checkSwitcher(M3Check,rows[0][3])
+	checkSwitcher(M4Check,rows[0][4])
+	checkSwitcher(M5Check,rows[0][5])
+	checkSwitcher(M6Check,rows[0][6])
+	checkSwitcher(M7Check,rows[0][7])
+	checkSwitcher(M8Check,rows[0][8])
+	checkSwitcher(M9Check,rows[0][9])
+	checkSwitcher(M10Check,rows[0][10])
+	checkSwitcher(M11Check,rows[0][11])
+	checkSwitcher(M12Check,rows[0][12])
+	checkSwitcher(M13Check,rows[0][13])
+	checkSwitcher(M14Check,rows[0][14])
+	checkSwitcher(M15Check,rows[0][15])
+	checkSwitcher(M16Check,rows[0][16])
+	checkSwitcher(T1Check,rows[0][17])
+	checkSwitcher(T2Check,rows[0][18])
+	checkSwitcher(T3Check,rows[0][19])
+	checkSwitcher(T4Check,rows[0][20])
+	checkSwitcher(T5Check,rows[0][21])
+	checkSwitcher(T6Check,rows[0][22])
+	checkSwitcher(T7Check,rows[0][23])
+	checkSwitcher(T8Check,rows[0][24])
+	checkSwitcher(T9Check,rows[0][25])
+	checkSwitcher(T10Check,rows[0][26])
+	checkSwitcher(T11Check,rows[0][27])
+	checkSwitcher(T12Check,rows[0][28])
+	checkSwitcher(T13Check,rows[0][29])
+	checkSwitcher(T14Check,rows[0][30])
+	checkSwitcher(T15Check,rows[0][31])
+	checkSwitcher(T16Check,rows[0][32])
+	checkSwitcher(W1Check,rows[0][33])
+	checkSwitcher(W2Check,rows[0][34])
+	checkSwitcher(W3Check,rows[0][35])
+	checkSwitcher(W4Check,rows[0][36])
+	checkSwitcher(W5Check,rows[0][37])
+	checkSwitcher(W6Check,rows[0][38])
+	checkSwitcher(W7Check,rows[0][39])
+	checkSwitcher(W8Check,rows[0][40])
+	checkSwitcher(W9Check,rows[0][41])
+	checkSwitcher(W10Check,rows[0][42])
+	checkSwitcher(W11Check,rows[0][43])
+	checkSwitcher(W12Check,rows[0][44])
+	checkSwitcher(W13Check,rows[0][45])
+	checkSwitcher(W14Check,rows[0][46])
+	checkSwitcher(W15Check,rows[0][47])
+	checkSwitcher(W16Check,rows[0][48])
+	checkSwitcher(R1Check,rows[0][49])
+	checkSwitcher(R2Check,rows[0][50])
+	checkSwitcher(R3Check,rows[0][51])
+	checkSwitcher(R4Check,rows[0][52])
+	checkSwitcher(R5Check,rows[0][53])
+	checkSwitcher(R6Check,rows[0][54])
+	checkSwitcher(R7Check,rows[0][55])
+	checkSwitcher(R8Check,rows[0][56])
+	checkSwitcher(R9Check,rows[0][57])
+	checkSwitcher(R10Check,rows[0][58])
+	checkSwitcher(R11Check,rows[0][59])
+	checkSwitcher(R12Check,rows[0][60])
+	checkSwitcher(R13Check,rows[0][61])
+	checkSwitcher(R14Check,rows[0][62])
+	checkSwitcher(R15Check,rows[0][63])
+	checkSwitcher(R16Check,rows[0][64])
+	checkSwitcher(F1Check,rows[0][65])
+	checkSwitcher(F2Check,rows[0][66])
+	checkSwitcher(F3Check,rows[0][67])
+	checkSwitcher(F4Check,rows[0][68])
+	checkSwitcher(F5Check,rows[0][69])
+	checkSwitcher(F6Check,rows[0][70])
+	checkSwitcher(F7Check,rows[0][71])
+	checkSwitcher(F8Check,rows[0][72])
+	checkSwitcher(F9Check,rows[0][73])
+	checkSwitcher(F10Check,rows[0][74])
+	checkSwitcher(F11Check,rows[0][75])
+	checkSwitcher(F12Check,rows[0][76])
+	checkSwitcher(F13Check,rows[0][77])
+	checkSwitcher(F14Check,rows[0][78])
+	checkSwitcher(F15Check,rows[0][79])
+	checkSwitcher(F16Check,rows[0][80])
+
+	#Team Act Selecter
+	cur.execute("SELECT * FROM Performer WHERE perfName = ?",(perfCombo.get(),))
+	rows = cur.fetchall()
+
+	comboSwitcher(perfAct1Combo,rows[0][1])
+	comboSwitcher(perfAct2Combo,rows[0][2])
+	comboSwitcher(perfAct3Combo,rows[0][3])
+	comboSwitcher(perfAct4Combo,rows[0][4])
+	comboSwitcher(perfAct5Combo,rows[0][5])
+	comboSwitcher(perfTeam1Combo,rows[0][6])
+	comboSwitcher(perfTeam2Combo,rows[0][7])
+	comboSwitcher(perfTeam3Combo,rows[0][8])
+	comboSwitcher(perfTeam4Combo,rows[0][9])
+	comboSwitcher(perfTeam5Combo,rows[0][10])
+
+	cur.close()
+	conn.close()
 
 	statusBar.configure(text="Loaded " + perfCombo.get())
 
@@ -55,7 +160,135 @@ def fetchPerfValues(e):
 #==================================
 def fetchTeamValues(e):
 
-	statusBar.configure(text="Loaded " + perfCombo.get())
+	conn = sql.connect(dbName)
+	cur = conn.cursor()
+
+	a = teamActCombo.get()
+	t = teamCombo.get() 
+	#Fetch Members
+	cur.execute("SELECT PerfName FROM Performer WHERE (Act1=? AND Team1=?) " + \
+	"OR (Act2=? AND Team2=?) " + \
+	"OR (Act3=? AND Team3=?) " + \
+	"OR (Act4=? AND Team4=?) " + \
+	"OR (Act5=? AND Team5=?) ", \
+	(a,t,a,t,a,t,a,t,a,t))
+
+	output = ""
+	rows = cur.fetchall()
+	for row in rows:
+		output += str(row[0]) + "\n"
+	teamMemLabel.configure(text=output)
+
+	cur.execute("SELECT * FROM TeamSchedule WHERE ActName=? AND TeamName=?",(a,t))
+	rows = cur.fetchall()
+
+	#Checkbox flipper
+	checkSwitcher(TM1Check,rows[0][2])
+	checkSwitcher(TM2Check,rows[0][3])
+	checkSwitcher(TM3Check,rows[0][4])
+	checkSwitcher(TM4Check,rows[0][5])
+	checkSwitcher(TM5Check,rows[0][6])
+	checkSwitcher(TM6Check,rows[0][7])
+	checkSwitcher(TM7Check,rows[0][8])
+	checkSwitcher(TM8Check,rows[0][9])
+	checkSwitcher(TM9Check,rows[0][10])
+	checkSwitcher(TM10Check,rows[0][11])
+	checkSwitcher(TM11Check,rows[0][12])
+	checkSwitcher(TM12Check,rows[0][13])
+	checkSwitcher(TM13Check,rows[0][14])
+	checkSwitcher(TM14Check,rows[0][15])
+	checkSwitcher(TM15Check,rows[0][16])
+	checkSwitcher(TM16Check,rows[0][17])
+	checkSwitcher(TT1Check,rows[0][18])
+	checkSwitcher(TT2Check,rows[0][19])
+	checkSwitcher(TT3Check,rows[0][20])
+	checkSwitcher(TT4Check,rows[0][21])
+	checkSwitcher(TT5Check,rows[0][22])
+	checkSwitcher(TT6Check,rows[0][23])
+	checkSwitcher(TT7Check,rows[0][24])
+	checkSwitcher(TT8Check,rows[0][25])
+	checkSwitcher(TT9Check,rows[0][26])
+	checkSwitcher(TT10Check,rows[0][27])
+	checkSwitcher(TT11Check,rows[0][28])
+	checkSwitcher(TT12Check,rows[0][29])
+	checkSwitcher(TT13Check,rows[0][30])
+	checkSwitcher(TT14Check,rows[0][31])
+	checkSwitcher(TT15Check,rows[0][32])
+	checkSwitcher(TT16Check,rows[0][33])
+	checkSwitcher(TW1Check,rows[0][34])
+	checkSwitcher(TW2Check,rows[0][35])
+	checkSwitcher(TW3Check,rows[0][36])
+	checkSwitcher(TW4Check,rows[0][37])
+	checkSwitcher(TW5Check,rows[0][38])
+	checkSwitcher(TW6Check,rows[0][39])
+	checkSwitcher(TW7Check,rows[0][40])
+	checkSwitcher(TW8Check,rows[0][41])
+	checkSwitcher(TW9Check,rows[0][42])
+	checkSwitcher(TW10Check,rows[0][43])
+	checkSwitcher(TW11Check,rows[0][44])
+	checkSwitcher(TW12Check,rows[0][45])
+	checkSwitcher(TW13Check,rows[0][46])
+	checkSwitcher(TW14Check,rows[0][47])
+	checkSwitcher(TW15Check,rows[0][48])
+	checkSwitcher(TW16Check,rows[0][49])
+	checkSwitcher(TR1Check,rows[0][50])
+	checkSwitcher(TR2Check,rows[0][51])
+	checkSwitcher(TR3Check,rows[0][52])
+	checkSwitcher(TR4Check,rows[0][53])
+	checkSwitcher(TR5Check,rows[0][54])
+	checkSwitcher(TR6Check,rows[0][55])
+	checkSwitcher(TR7Check,rows[0][56])
+	checkSwitcher(TR8Check,rows[0][57])
+	checkSwitcher(TR9Check,rows[0][58])
+	checkSwitcher(TR10Check,rows[0][59])
+	checkSwitcher(TR11Check,rows[0][60])
+	checkSwitcher(TR12Check,rows[0][61])
+	checkSwitcher(TR13Check,rows[0][62])
+	checkSwitcher(TR14Check,rows[0][63])
+	checkSwitcher(TR15Check,rows[0][64])
+	checkSwitcher(TR16Check,rows[0][65])
+	checkSwitcher(TF1Check,rows[0][66])
+	checkSwitcher(TF2Check,rows[0][67])
+	checkSwitcher(TF3Check,rows[0][68])
+	checkSwitcher(TF4Check,rows[0][69])
+	checkSwitcher(TF5Check,rows[0][70])
+	checkSwitcher(TF6Check,rows[0][71])
+	checkSwitcher(TF7Check,rows[0][72])
+	checkSwitcher(TF8Check,rows[0][73])
+	checkSwitcher(TF9Check,rows[0][74])
+	checkSwitcher(TF10Check,rows[0][75])
+	checkSwitcher(TF11Check,rows[0][76])
+	checkSwitcher(TF12Check,rows[0][77])
+	checkSwitcher(TF13Check,rows[0][78])
+	checkSwitcher(TF14Check,rows[0][79])
+	checkSwitcher(TF15Check,rows[0][80])
+	checkSwitcher(TF16Check,rows[0][81])
+
+	cur.close()
+	conn.close()
+
+
+	statusBar.configure(text="Loaded " + a + " Team " + t)
+
+#==================================
+#=         CheckSwitcher
+#==================================
+def checkSwitcher(chkBox,value):
+
+	if value is None or value == 0:
+		chkBox.deselect()
+	else:
+		chkBox.select()
+
+#==================================
+#=         ComboSwitcher
+#============== ====================
+def comboSwitcher(combo,value):
+
+	if value is None:
+		combo.set('')
+	else:
+		combo.set(value)
 
 
 #==================================
@@ -78,6 +311,96 @@ def actSave():
 	statusBar.configure(text="Saved " + actCombo.get())
 
 
+#==================================
+#=     Perf Save
+#==================================
+
+def savePerf():
+	conn = sql.connect(dbName)
+	cur = conn.cursor()
+
+	#Add all the Schedule checkboxes in
+	cur.execute("UPDATE Schedule SET " + \
+		"M1=?, M2=?, M3=?, M4=?," + \
+		"M5=?, M6=?, M7=?, M8=?," + \
+		"M9=?, M10=?, M11=?, M12=?," + \
+		"M13=?, M14=?, M15=?, M16=?," + \
+		"T1=?, T2=?, T3=?, T4=?," + \
+		"T5=?, T6=?, T7=?, T8=?," + \
+		"T9=?, T10=?, T11=?, T12=?," + \
+		"T13=?, T14=?, T15=?, T16=?," + \
+		"W1=?, W2=?, W3=?, W4=?," + \
+		"W5=?, W6=?, W7=?, W8=?," + \
+		"W9=?, W10=?, W11=?, W12=?," + \
+		"W13=?, W14=?, W15=?, W16=?," + \
+		"R1=?, R2=?, R3=?, R4=?," + \
+		"R5=?, R6=?, R7=?, R8=?," + \
+		"R9=?, R10=?, R11=?, R12=?," + \
+		"R13=?, R14=?, R15=?, R16=?," + \
+		"F1=?, F2=?, F3=?, F4=?," + \
+		"F5=?, F6=?, F7=?, F8=?," + \
+		"F9=?, F10=?, F11=?, F12=?," + \
+		"F13=?, F14=?, F15=?, F16=? " + \
+		"WHERE PerfName=?",(\
+		M1Result.get(),M2Result.get(),\
+		M3Result.get(),M4Result.get(),\
+		M5Result.get(),M6Result.get(),\
+		M7Result.get(),M8Result.get(),\
+		M9Result.get(),M10Result.get(),\
+		M11Result.get(),M12Result.get(),\
+		M13Result.get(),M14Result.get(),\
+		M15Result.get(),M16Result.get(),\
+		T1Result.get(),T2Result.get(),\
+		T3Result.get(),T4Result.get(),\
+		T5Result.get(),T6Result.get(),\
+		T7Result.get(),T8Result.get(),\
+		T9Result.get(),T10Result.get(),\
+		T11Result.get(),T12Result.get(),\
+		T13Result.get(),T14Result.get(),\
+		T15Result.get(),T16Result.get(),\
+		W1Result.get(),W2Result.get(),\
+		W3Result.get(),W4Result.get(),\
+		W5Result.get(),W6Result.get(),\
+		W7Result.get(),W8Result.get(),\
+		W9Result.get(),W10Result.get(),\
+		W11Result.get(),W12Result.get(),\
+		W13Result.get(),W14Result.get(),\
+		W15Result.get(),W16Result.get(),\
+		R1Result.get(),R2Result.get(),\
+		R3Result.get(),R4Result.get(),\
+		R5Result.get(),R6Result.get(),\
+		R7Result.get(),R8Result.get(),\
+		R9Result.get(),R10Result.get(),\
+		R11Result.get(),R12Result.get(),\
+		R13Result.get(),R14Result.get(),\
+		R15Result.get(),R16Result.get(),\
+		F1Result.get(),F2Result.get(),\
+		F3Result.get(),F4Result.get(),\
+		F5Result.get(),F6Result.get(),\
+		F7Result.get(),F8Result.get(),\
+		F9Result.get(),F10Result.get(),\
+		F11Result.get(),F12Result.get(),\
+		F13Result.get(),F14Result.get(),\
+		F15Result.get(),F16Result.get(),\
+		perfCombo.get()))
+
+	conn.commit()
+
+	conn.execute("UPDATE Performer SET " + \
+		"Act1=?, Team1=?, Act2=?, Team2=?," + \
+		"Act3=?, Team3=?, Act4=?, Team4=?," + \
+		"Act5=?, Team5=? WHERE PerfName=?",(\
+		perfAct1Combo.get(), perfTeam1Combo.get(),\
+		perfAct2Combo.get(), perfTeam2Combo.get(),\
+		perfAct3Combo.get(), perfTeam3Combo.get(),\
+		perfAct4Combo.get(), perfTeam4Combo.get(),\
+		perfAct5Combo.get(), perfTeam5Combo.get(),\
+		perfCombo.get()))
+	conn.commit()
+	cur.close()
+	conn.close()
+
+	statusBar.configure(text="Saved Schedule for " + perfCombo.get())
 
 #==================================
 #=         New Coach Add
@@ -176,8 +499,11 @@ def addNewPerf():
 
 	#Insert New Performer
 	cur.execute("INSERT OR IGNORE INTO Performer (PerfName) VALUES(?)",(input,))
-
 	conn.commit()
+	cur.execute("INSERT OR IGNORE INTO Schedule (PerfName) VALUES(?)",(input,))
+	conn.commit()
+
+
 	cur.close()
 	conn.close()
 
@@ -414,7 +740,7 @@ def fetchSTeams(combobox):
 	return output
 
 #==================================
-#=           Update Window
+#=       Clear Perf Combos
 #==================================
 def clearPerfCombos():
 	perfAct1Combo.set('')
@@ -427,6 +753,91 @@ def clearPerfCombos():
 	perfTeam3Combo.set('')
 	perfTeam4Combo.set('')
 	perfTeam5Combo.set('')
+
+#==================================
+#=       Clear Perf Combos
+#==================================
+def clearScheduleCombos():
+	M1Check.deselect()
+	M2Check.deselect()
+	M3Check.deselect()
+	M4Check.deselect()
+	M5Check.deselect()
+	M6Check.deselect()
+	M7Check.deselect()
+	M8Check.deselect()
+	M9Check.deselect()
+	M10Check.deselect()
+	M11Check.deselect()
+	M12Check.deselect()
+	M13Check.deselect()
+	M14Check.deselect()
+	M15Check.deselect()
+	M16Check.deselect()
+	T1Check.deselect()
+	T2Check.deselect()
+	T3Check.deselect()
+	T4Check.deselect()
+	T5Check.deselect()
+	T6Check.deselect()
+	T7Check.deselect()
+	T8Check.deselect()
+	T9Check.deselect()
+	T10Check.deselect()
+	T11Check.deselect()
+	T12Check.deselect()
+	T13Check.deselect()
+	T14Check.deselect()
+	T15Check.deselect()
+	T16Check.deselect()
+	W1Check.deselect()
+	W2Check.deselect()
+	W3Check.deselect()
+	W4Check.deselect()
+	W5Check.deselect()
+	W6Check.deselect()
+	W7Check.deselect()
+	W8Check.deselect()
+	W9Check.deselect()
+	W10Check.deselect()
+	W11Check.deselect()
+	W12Check.deselect()
+	W13Check.deselect()
+	W14Check.deselect()
+	W15Check.deselect()
+	W16Check.deselect()
+	R1Check.deselect()
+	R2Check.deselect()
+	R3Check.deselect()
+	R4Check.deselect()
+	R5Check.deselect()
+	R6Check.deselect()
+	R7Check.deselect()
+	R8Check.deselect()
+	R9Check.deselect()
+	R10Check.deselect()
+	R11Check.deselect()
+	R12Check.deselect()
+	R13Check.deselect()
+	R14Check.deselect()
+	R15Check.deselect()
+	R16Check.deselect()
+	F1Check.deselect()
+	F2Check.deselect()
+	F3Check.deselect()
+	F4Check.deselect()
+	F5Check.deselect()
+	F6Check.deselect()
+	F7Check.deselect()
+	F8Check.deselect()
+	F9Check.deselect()
+	F10Check.deselect()
+	F11Check.deselect()
+	F12Check.deselect()
+	F13Check.deselect()
+	F14Check.deselect()
+	F15Check.deselect()
+	F16Check.deselect()
 
 #==================================
 #=           Update Window
@@ -529,7 +940,7 @@ newCoachButton.grid(column=2,row=3,padx=10,pady=10)
 #HourLong Practice
 hourResult = IntVar()
 hourCheck = Checkbutton(actFrame,text="Hour long practice?",variable=hourResult)
-hourCheck.grid(column=3,row=3,padx=10,pady=10)
+hourCheck.grid(column=4,row=3,padx=10,pady=10)
 
 #Spacer text
 ttk.Label(actFrame, text="Select Practice Areas").grid(column=2, row=4, padx=10, pady=10)
@@ -551,7 +962,7 @@ ring3Check.grid(column=2,row=6,padx=10,pady=10)
 #Ring2 CheckBox
 ring2Result = IntVar()
 ring2Check = Checkbutton(actFrame,text="Ring 2",variable=ring2Result)
-ring2Check.grid(column=3,row=6,padx=10,pady=10)
+ring2Check.grid(column=4,row=6,padx=10,pady=10)
 
 #Ring1 CheckBox
 ring1Result = IntVar()
@@ -585,66 +996,72 @@ removePerfButton = Button(perfFrame, text='Remove Performer', command=removePerf
 removePerfButton.grid(column=4,row=0,padx=5,pady=0)
 
 #Performer Act  text
-ttk.Label(perfFrame, text="Act 1").grid(column=0, row=2, padx=5, pady=5)
-ttk.Label(perfFrame, text="Act 2").grid(column=1, row=2, padx=5, pady=5)
-ttk.Label(perfFrame, text="Act 3").grid(column=2, row=2, padx=5, pady=5)
-ttk.Label(perfFrame, text="Act 4").grid(column=3, row=2, padx=5, pady=5)
-ttk.Label(perfFrame, text="Act 5").grid(column=4, row=2, padx=5, pady=5)
+ttk.Label(perfFrame, text="Act 1").grid(column=0, row=1, padx=5, pady=3)
+ttk.Label(perfFrame, text="Act 2").grid(column=1, row=1, padx=5, pady=3)
+ttk.Label(perfFrame, text="Act 3").grid(column=2, row=1, padx=5, pady=3)
+ttk.Label(perfFrame, text="Act 4").grid(column=4, row=1, padx=5, pady=3)
+ttk.Label(perfFrame, text="Act 5").grid(column=4, row=1, padx=5, pady=3)
 
 #Performer Act Comboboxes
 perfAct1Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfAct1Combo.configure(values=fetchActs()))
 perfAct1Combo['values'] = fetchActs()
 perfAct1Combo['width'] = 15
-perfAct1Combo.grid(column=0,row=3,padx=5,pady=5)
+perfAct1Combo.grid(column=0,row=2,padx=5,pady=3)
 perfAct2Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfAct2Combo.configure(values=fetchActs()))
 perfAct2Combo['values'] = fetchActs()
 perfAct2Combo['width'] = 15
-perfAct2Combo.grid(column=1,row=3,padx=5,pady=5)
+perfAct2Combo.grid(column=1,row=2,padx=5,pady=3)
 perfAct3Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfAct3Combo.configure(values=fetchActs()))
 perfAct3Combo['values'] = fetchActs()
 perfAct3Combo['width'] = 15
-perfAct3Combo.grid(column=2,row=3,padx=5,pady=5)
+perfAct3Combo.grid(column=2,row=2,padx=5,pady=3)
 perfAct4Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfAct4Combo.configure(values=fetchActs()))
 perfAct4Combo['values'] = fetchActs()
 perfAct4Combo['width'] = 15
-perfAct4Combo.grid(column=3,row=3,padx=5,pady=5)
+perfAct4Combo.grid(column=4,row=2,padx=5,pady=3)
 perfAct5Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfAct5Combo.configure(values=fetchActs()))
 perfAct5Combo['values'] = fetchActs()
 perfAct5Combo['width'] = 15
-perfAct5Combo.grid(column=4,row=3,padx=5,pady=5)
+perfAct5Combo.grid(column=4,row=2,padx=5,pady=5)
 
 #Performer Team  text
-ttk.Label(perfFrame, text="Team 1").grid(column=0, row=4, padx=10, pady=5)
-ttk.Label(perfFrame, text="Team 2").grid(column=1, row=4, padx=10, pady=5)
-ttk.Label(perfFrame, text="Team 3").grid(column=2, row=4, padx=10, pady=5)
-ttk.Label(perfFrame, text="Team 4").grid(column=3, row=4, padx=10, pady=5)
-ttk.Label(perfFrame, text="Team 5").grid(column=4, row=4, padx=10, pady=5)
+ttk.Label(perfFrame, text="Team 1").grid(column=0, row=3, padx=10, pady=2)
+ttk.Label(perfFrame, text="Team 2").grid(column=1, row=3, padx=10, pady=2)
+ttk.Label(perfFrame, text="Team 3").grid(column=2, row=3, padx=10, pady=2)
+ttk.Label(perfFrame, text="Team 4").grid(column=3, row=3, padx=10, pady=2)
+ttk.Label(perfFrame, text="Team 5").grid(column=4, row=3, padx=10, pady=2)
 
 #Performer Act Comboboxes
 perfTeam1Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfTeam1Combo.configure(values=fetchSTeams(perfAct1Combo)))
 perfTeam1Combo['values'] = fetchSTeams(perfAct1Combo)
 perfTeam1Combo['width'] = 15
-perfTeam1Combo.grid(column=0,row=5,padx=5,pady=5)
+perfTeam1Combo.grid(column=0,row=4,padx=5,pady=3)
 perfTeam2Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfTeam2Combo.configure(values=fetchSTeams(perfAct2Combo)))
 perfTeam2Combo['values'] = fetchSTeams(perfAct2Combo)
 perfTeam2Combo['width'] = 15
-perfTeam2Combo.grid(column=1,row=5,padx=5,pady=5)
+perfTeam2Combo.grid(column=1,row=4,padx=5,pady=3)
 perfTeam3Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfTeam3Combo.configure(values=fetchSTeams(perfAct3Combo)))
 perfTeam3Combo['values'] = fetchSTeams(perfAct3Combo)
 perfTeam3Combo['width'] = 15
-perfTeam3Combo.grid(column=2,row=5,padx=5,pady=5)
+perfTeam3Combo.grid(column=2,row=4,padx=5,pady=3)
 perfTeam4Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfTeam4Combo.configure(values=fetchSTeams(perfAct4Combo)))
 perfTeam4Combo['values'] = fetchSTeams(perfAct4Combo)
 perfTeam4Combo['width'] = 15
-perfTeam4Combo.grid(column=3,row=5,padx=5,pady=5)
+perfTeam4Combo.grid(column=3,row=4,padx=5,pady=3)
 perfTeam5Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfTeam5Combo.configure(values=fetchSTeams(perfAct5Combo)))
 perfTeam5Combo['values'] = fetchSTeams(perfAct5Combo)
 perfTeam5Combo['width'] = 15
-perfTeam5Combo.grid(column=4,row=5,padx=5,pady=5)
+perfTeam5Combo.grid(column=4,row=4,padx=5,pady=3)
 
 #Clear Performer Act/Team
-clearPerfButton = Button(perfFrame, text='clear', command=clearPerfCombos)
-clearPerfButton.grid(column=4,row=6,padx=5,pady=5)
+clearPerfButton = Button(perfFrame, text='Clear Acts', command=clearPerfCombos)
+clearPerfButton.grid(column=0,row=5,padx=5,pady=5)
+#Clear Performer Act/Team
+clearPerfButton = Button(perfFrame, text='Clear Schedule', command=clearScheduleCombos)
+clearPerfButton.grid(column=1,row=5,padx=5,pady=5)
+#Clear Performer Act/Team
+clearPerfButton = Button(perfFrame, text='Save Schedule', command=savePerf)
+clearPerfButton.grid(column=4,row=5,padx=5,pady=5)
 
 #Schedule Textboxes
 ttk.Label(perfFrame, text="Monday").grid(column=0, row=7, padx=10, pady=5)
@@ -653,6 +1070,8 @@ ttk.Label(perfFrame, text="Wednesday").grid(column=2, row=7, padx=10, pady=5)
 ttk.Label(perfFrame, text="Thursday").grid(column=3, row=7, padx=10, pady=5)
 ttk.Label(perfFrame, text="Friday").grid(column=4, row=7, padx=10, pady=5)
 
+#Schedule Textbox
+ttk.Label(perfFrame, text="Check for Avaliable:").grid(column=2, row=6, padx=10, pady=5)
 
 
 #Monday CheckBoxes
@@ -931,6 +1350,275 @@ newTeamButton.grid(column=4,row=1,padx=5,pady=10)
 removeTeamButton = Button(teamFrame, text='Remove Team', command=removeTeam)
 removeTeamButton.grid(column=5,row=1,padx=5,pady=10)
 
+#Team Num text
+ttk.Label(teamFrame, text="Team Members:").grid(column=0, row=2, padx=5, pady=10)
+teamMemLabel = Label(teamFrame, text=" ")
+teamMemLabel.grid(column=1, row=2, rowspan=3, padx=5, pady=10)
+
+#Generate reminder
+ttk.Label(teamFrame, text="Remember to Generate Team Schedules").grid(column=2, columnspan=3,row=5, padx=10, pady=5)
+
+
+#Schedule Textboxes
+ttk.Label(teamFrame, text="Monday").grid(column=0, row=7, padx=10, pady=5)
+ttk.Label(teamFrame, text="Tuesday").grid(column=1, row=7, padx=10, pady=5)
+ttk.Label(teamFrame, text="Wednesday").grid(column=2, row=7, padx=10, pady=5)
+ttk.Label(teamFrame, text="Thursday").grid(column=4, row=7, padx=10, pady=5)
+ttk.Label(teamFrame, text="Friday").grid(column=5, row=7, padx=10, pady=5)
+
+#Schedule Textbox
+ttk.Label(teamFrame, text="Overwrite Team Avalability:").grid(column=2, columnspan = 3,row=6, padx=10, pady=5)
+
+
+#Monday CheckBoxes
+TM1Result = IntVar()
+TM1Check = Checkbutton(teamFrame,text="  9:00",variable=TM1Result,justify=LEFT)
+TM1Check.grid(column=0,row=8,padx=5,pady=0)
+TM2Result = IntVar()
+TM2Check = Checkbutton(teamFrame,text="  9:30",variable=TM2Result,justify=LEFT)
+TM2Check.grid(column=0,row=9,padx=5,pady=0)
+TM3Result = IntVar()
+TM3Check = Checkbutton(teamFrame,text="10:00",variable=TM3Result,justify=LEFT)
+TM3Check.grid(column=0,row=10,padx=5,pady=0)
+TM4Result = IntVar()
+TM4Check = Checkbutton(teamFrame,text="10:30",variable=TM4Result,justify=LEFT)
+TM4Check.grid(column=0,row=11,padx=5,pady=0)
+TM5Result = IntVar()
+TM5Check = Checkbutton(teamFrame,text="11:00",variable=TM5Result,justify=LEFT)
+TM5Check.grid(column=0,row=12,padx=5,pady=0)
+TM6Result = IntVar()
+TM6Check = Checkbutton(teamFrame,text="11:30",variable=TM6Result,justify=LEFT)
+TM6Check.grid(column=0,row=13,padx=5,pady=0)
+TM7Result = IntVar()
+TM7Check = Checkbutton(teamFrame,text="  1:00",variable=TM7Result,justify=LEFT)
+TM7Check.grid(column=0,row=14,padx=5,pady=0)
+TM8Result = IntVar()
+TM8Check = Checkbutton(teamFrame,text="  1:30",variable=TM8Result,justify=LEFT)
+TM8Check.grid(column=0,row=15,padx=5,pady=0)
+TM9Result = IntVar()
+TM9Check = Checkbutton(teamFrame,text="  2:00",variable=TM9Result,justify=LEFT)
+TM9Check.grid(column=0,row=16,padx=5,pady=0)
+TM10Result = IntVar()
+TM10Check = Checkbutton(teamFrame,text="  2:30",variable=TM10Result,justify=LEFT)
+TM10Check.grid(column=0,row=17,padx=5,pady=0)
+TM11Result = IntVar()
+TM11Check = Checkbutton(teamFrame,text="  3:00",variable=TM11Result,justify=LEFT)
+TM11Check.grid(column=0,row=18,padx=5,pady=0)
+TM12Result = IntVar()
+TM12Check = Checkbutton(teamFrame,text="  3:30",variable=TM12Result,justify=LEFT)
+TM12Check.grid(column=0,row=19,padx=5,pady=0)
+TM13Result = IntVar()
+TM13Check = Checkbutton(teamFrame,text="  4:00",variable=TM13Result,justify=LEFT)
+TM13Check.grid(column=0,row=20,padx=5,pady=0)
+TM14Result = IntVar()
+TM14Check = Checkbutton(teamFrame,text="  4:30",variable=TM14Result,justify=LEFT)
+TM14Check.grid(column=0,row=21,padx=5,pady=0)
+TM15Result = IntVar()
+TM15Check = Checkbutton(teamFrame,text="  5:00",variable=TM15Result,justify=LEFT)
+TM15Check.grid(column=0,row=22,padx=5,pady=0)
+TM16Result = IntVar()
+TM16Check = Checkbutton(teamFrame,text="  5:30",variable=TM16Result,justify=LEFT)
+TM16Check.grid(column=0,row=23,padx=5,pady=0)
+
+#Tuesday CheckBoxes
+TT1Result = IntVar()
+TT1Check = Checkbutton(teamFrame,text="  9:00",variable=TT1Result,justify=LEFT)
+TT1Check.grid(column=1,row=8,padx=5,pady=0)
+TT2Result = IntVar()
+TT2Check = Checkbutton(teamFrame,text="  9:30",variable=TT2Result,justify=LEFT)
+TT2Check.grid(column=1,row=9,padx=5,pady=0)
+TT3Result = IntVar()
+TT3Check = Checkbutton(teamFrame,text="10:00",variable=TT3Result,justify=LEFT)
+TT3Check.grid(column=1,row=10,padx=5,pady=0)
+TT4Result = IntVar()
+TT4Check = Checkbutton(teamFrame,text="10:30",variable=TT4Result,justify=LEFT)
+TT4Check.grid(column=1,row=11,padx=5,pady=0)
+TT5Result = IntVar()
+TT5Check = Checkbutton(teamFrame,text="11:00",variable=TT5Result,justify=LEFT)
+TT5Check.grid(column=1,row=12,padx=5,pady=0)
+TT6Result = IntVar()
+TT6Check = Checkbutton(teamFrame,text="11:30",variable=TT6Result,justify=LEFT)
+TT6Check.grid(column=1,row=13,padx=5,pady=0)
+TT7Result = IntVar()
+TT7Check = Checkbutton(teamFrame,text="  1:00",variable=TT7Result,justify=LEFT)
+TT7Check.grid(column=1,row=14,padx=5,pady=0)
+TT8Result = IntVar()
+TT8Check = Checkbutton(teamFrame,text="  1:30",variable=TT8Result,justify=LEFT)
+TT8Check.grid(column=1,row=15,padx=5,pady=0)
+TT9Result = IntVar()
+TT9Check = Checkbutton(teamFrame,text="  2:00",variable=TT9Result,justify=LEFT)
+TT9Check.grid(column=1,row=16,padx=5,pady=0)
+TT10Result = IntVar()
+TT10Check = Checkbutton(teamFrame,text="  2:30",variable=TT10Result,justify=LEFT)
+TT10Check.grid(column=1,row=17,padx=5,pady=0)
+TT11Result = IntVar()
+TT11Check = Checkbutton(teamFrame,text="  3:00",variable=TT11Result,justify=LEFT)
+TT11Check.grid(column=1,row=18,padx=5,pady=0)
+TT12Result = IntVar()
+TT12Check = Checkbutton(teamFrame,text="  3:30",variable=TT12Result,justify=LEFT)
+TT12Check.grid(column=1,row=19,padx=5,pady=0)
+TT13Result = IntVar()
+TT13Check = Checkbutton(teamFrame,text="  4:00",variable=TT13Result,justify=LEFT)
+TT13Check.grid(column=1,row=20,padx=5,pady=0)
+TT14Result = IntVar()
+TT14Check = Checkbutton(teamFrame,text="  4:30",variable=TT14Result,justify=LEFT)
+TT14Check.grid(column=1,row=21,padx=5,pady=0)
+TT15Result = IntVar()
+TT15Check = Checkbutton(teamFrame,text="  5:00",variable=TT15Result,justify=LEFT)
+TT15Check.grid(column=1,row=22,padx=5,pady=0)
+TT16Result = IntVar()
+TT16Check = Checkbutton(teamFrame,text="  5:30",variable=TT16Result,justify=LEFT)
+TT16Check.grid(column=1,row=23,padx=5,pady=0)
+
+#Wednesday CheckBoxes
+TW1Result = IntVar()
+TW1Check = Checkbutton(teamFrame,text="  9:00",variable=TW1Result,justify=LEFT)
+TW1Check.grid(column=2,row=8,padx=5,pady=0)
+TW2Result = IntVar()
+TW2Check = Checkbutton(teamFrame,text="  9:30",variable=TW2Result,justify=LEFT)
+TW2Check.grid(column=2,row=9,padx=5,pady=0)
+TW3Result = IntVar()
+TW3Check = Checkbutton(teamFrame,text="10:00",variable=TW3Result,justify=LEFT)
+TW3Check.grid(column=2,row=10,padx=5,pady=0)
+TW4Result = IntVar()
+TW4Check = Checkbutton(teamFrame,text="10:30",variable=TW4Result,justify=LEFT)
+TW4Check.grid(column=2,row=11,padx=5,pady=0)
+TW5Result = IntVar()
+TW5Check = Checkbutton(teamFrame,text="11:00",variable=TW5Result,justify=LEFT)
+TW5Check.grid(column=2,row=12,padx=5,pady=0)
+TW6Result = IntVar()
+TW6Check = Checkbutton(teamFrame,text="11:30",variable=TW6Result,justify=LEFT)
+TW6Check.grid(column=2,row=13,padx=5,pady=0)
+TW7Result = IntVar()
+TW7Check = Checkbutton(teamFrame,text="  1:00",variable=TW7Result,justify=LEFT)
+TW7Check.grid(column=2,row=14,padx=5,pady=0)
+TW8Result = IntVar()
+TW8Check = Checkbutton(teamFrame,text="  1:30",variable=TW8Result,justify=LEFT)
+TW8Check.grid(column=2,row=15,padx=5,pady=0)
+TW9Result = IntVar()
+TW9Check = Checkbutton(teamFrame,text="  2:00",variable=TW9Result,justify=LEFT)
+TW9Check.grid(column=2,row=16,padx=5,pady=0)
+TW10Result = IntVar()
+TW10Check = Checkbutton(teamFrame,text="  2:30",variable=TW10Result,justify=LEFT)
+TW10Check.grid(column=2,row=17,padx=5,pady=0)
+TW11Result = IntVar()
+TW11Check = Checkbutton(teamFrame,text="  3:00",variable=TW11Result,justify=LEFT)
+TW11Check.grid(column=2,row=18,padx=5,pady=0)
+TW12Result = IntVar()
+TW12Check = Checkbutton(teamFrame,text="  3:30",variable=TW12Result,justify=LEFT)
+TW12Check.grid(column=2,row=19,padx=5,pady=0)
+TW13Result = IntVar()
+TW13Check = Checkbutton(teamFrame,text="  4:00",variable=TW13Result,justify=LEFT)
+TW13Check.grid(column=2,row=20,padx=5,pady=0)
+TW14Result = IntVar()
+TW14Check = Checkbutton(teamFrame,text="  4:30",variable=TW14Result,justify=LEFT)
+TW14Check.grid(column=2,row=21,padx=5,pady=0)
+TW15Result = IntVar()
+TW15Check = Checkbutton(teamFrame,text="  5:00",variable=TW15Result,justify=LEFT)
+TW15Check.grid(column=2,row=22,padx=5,pady=0)
+TW16Result = IntVar()
+TW16Check = Checkbutton(teamFrame,text="  5:30",variable=TW16Result,justify=LEFT)
+TW16Check.grid(column=2,row=23,padx=5,pady=0)
+
+#Thursday CheckBoxes
+TR1Result = IntVar()
+TR1Check = Checkbutton(teamFrame,text="  9:00",variable=TR1Result,justify=LEFT)
+TR1Check.grid(column=4,row=8,padx=5,pady=0)
+TR2Result = IntVar()
+TR2Check = Checkbutton(teamFrame,text="  9:30",variable=TR2Result,justify=LEFT)
+TR2Check.grid(column=4,row=9,padx=5,pady=0)
+TR3Result = IntVar()
+TR3Check = Checkbutton(teamFrame,text="10:00",variable=TR3Result,justify=LEFT)
+TR3Check.grid(column=4,row=10,padx=5,pady=0)
+TR4Result = IntVar()
+TR4Check = Checkbutton(teamFrame,text="10:30",variable=TR4Result,justify=LEFT)
+TR4Check.grid(column=4,row=11,padx=5,pady=0)
+TR5Result = IntVar()
+TR5Check = Checkbutton(teamFrame,text="11:00",variable=TR5Result,justify=LEFT)
+TR5Check.grid(column=4,row=12,padx=5,pady=0)
+TR6Result = IntVar()
+TR6Check = Checkbutton(teamFrame,text="11:30",variable=TR6Result,justify=LEFT)
+TR6Check.grid(column=4,row=13,padx=5,pady=0)
+TR7Result = IntVar()
+TR7Check = Checkbutton(teamFrame,text="  1:00",variable=TR7Result,justify=LEFT)
+TR7Check.grid(column=4,row=14,padx=5,pady=0)
+TR8Result = IntVar()
+TR8Check = Checkbutton(teamFrame,text="  1:30",variable=TR8Result,justify=LEFT)
+TR8Check.grid(column=4,row=15,padx=5,pady=0)
+TR9Result = IntVar()
+TR9Check = Checkbutton(teamFrame,text="  2:00",variable=TR9Result,justify=LEFT)
+TR9Check.grid(column=4,row=16,padx=5,pady=0)
+TR10Result = IntVar()
+TR10Check = Checkbutton(teamFrame,text="  2:30",variable=TR10Result,justify=LEFT)
+TR10Check.grid(column=4,row=17,padx=5,pady=0)
+TR11Result = IntVar()
+TR11Check = Checkbutton(teamFrame,text="  3:00",variable=TR11Result,justify=LEFT)
+TR11Check.grid(column=4,row=18,padx=5,pady=0)
+TR12Result = IntVar()
+TR12Check = Checkbutton(teamFrame,text="  3:30",variable=TR12Result,justify=LEFT)
+TR12Check.grid(column=4,row=19,padx=5,pady=0)
+TR13Result = IntVar()
+TR13Check = Checkbutton(teamFrame,text="  4:00",variable=TR13Result,justify=LEFT)
+TR13Check.grid(column=4,row=20,padx=5,pady=0)
+TR14Result = IntVar()
+TR14Check = Checkbutton(teamFrame,text="  4:30",variable=TR14Result,justify=LEFT)
+TR14Check.grid(column=4,row=21,padx=5,pady=0)
+TR15Result = IntVar()
+TR15Check = Checkbutton(teamFrame,text="  5:00",variable=TR15Result,justify=LEFT)
+TR15Check.grid(column=4,row=22,padx=5,pady=0)
+TR16Result = IntVar()
+TR16Check = Checkbutton(teamFrame,text="  5:30",variable=TR16Result,justify=LEFT)
+TR16Check.grid(column=4,row=23,padx=5,pady=0)
+
+#Friday CheckBoxes
+TF1Result = IntVar()
+TF1Check = Checkbutton(teamFrame,text="  9:00",variable=TF1Result,justify=LEFT)
+TF1Check.grid(column=5,row=8,padx=5,pady=0)
+TF2Result = IntVar()
+TF2Check = Checkbutton(teamFrame,text="  9:30",variable=TF2Result,justify=LEFT)
+TF2Check.grid(column=5,row=9,padx=5,pady=0)
+TF3Result = IntVar()
+TF3Check = Checkbutton(teamFrame,text="10:00",variable=TF3Result,justify=LEFT)
+TF3Check.grid(column=5,row=10,padx=5,pady=0)
+TF4Result = IntVar()
+TF4Check = Checkbutton(teamFrame,text="10:30",variable=TF4Result,justify=LEFT)
+TF4Check.grid(column=5,row=11,padx=5,pady=0)
+TF5Result = IntVar()
+TF5Check = Checkbutton(teamFrame,text="11:00",variable=TF5Result,justify=LEFT)
+TF5Check.grid(column=5,row=12,padx=5,pady=0)
+TF6Result = IntVar()
+TF6Check = Checkbutton(teamFrame,text="11:30",variable=TF6Result,justify=LEFT)
+TF6Check.grid(column=5,row=13,padx=5,pady=0)
+TF7Result = IntVar()
+TF7Check = Checkbutton(teamFrame,text="  1:00",variable=TF7Result,justify=LEFT)
+TF7Check.grid(column=5,row=14,padx=5,pady=0)
+TF8Result = IntVar()
+TF8Check = Checkbutton(teamFrame,text="  1:30",variable=TF8Result,justify=LEFT)
+TF8Check.grid(column=5,row=15,padx=5,pady=0)
+TF9Result = IntVar()
+TF9Check = Checkbutton(teamFrame,text="  2:00",variable=TF9Result,justify=LEFT)
+TF9Check.grid(column=5,row=16,padx=5,pady=0)
+TF10Result = IntVar()
+TF10Check = Checkbutton(teamFrame,text="  2:30",variable=TF10Result,justify=LEFT)
+TF10Check.grid(column=5,row=17,padx=5,pady=0)
+TF11Result = IntVar()
+TF11Check = Checkbutton(teamFrame,text="  3:00",variable=TF11Result,justify=LEFT)
+TF11Check.grid(column=5,row=18,padx=5,pady=0)
+TF12Result = IntVar()
+TF12Check = Checkbutton(teamFrame,text="  3:30",variable=TF12Result,justify=LEFT)
+TF12Check.grid(column=5,row=19,padx=5,pady=0)
+TF13Result = IntVar()
+TF13Check = Checkbutton(teamFrame,text="  4:00",variable=TF13Result,justify=LEFT)
+TF13Check.grid(column=5,row=20,padx=5,pady=0)
+TF14Result = IntVar()
+TF14Check = Checkbutton(teamFrame,text="  4:30",variable=TF14Result,justify=LEFT)
+TF14Check.grid(column=5,row=21,padx=5,pady=0)
+TF15Result = IntVar()
+TF15Check = Checkbutton(teamFrame,text="  5:00",variable=TF15Result,justify=LEFT)
+TF15Check.grid(column=5,row=22,padx=5,pady=0)
+TF16Result = IntVar()
+TF16Check = Checkbutton(teamFrame,text="  5:30",variable=TF16Result,justify=LEFT)
+TF16Check.grid(column=5,row=23,padx=5,pady=0)
 
 #==================================
 #=           Loop
