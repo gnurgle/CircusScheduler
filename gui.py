@@ -3,6 +3,42 @@ from tkinter import ttk
 from tkinter import *
 from DBSetup import createDB
 import sqlite3 as sql
+from generate import generateTeam, actToList
+from test import recurListComp
+#==================================
+#=        Generate Team Schedules
+#==================================
+def genTeams():
+
+	conn = sql.connect(dbName)
+	cur = conn.cursor()
+	cur.execute("SELECT ActName FROM Act")
+	rows = cur.fetchall()
+
+	acts=[]
+	for row in rows:
+		acts.append(row[0])
+
+	for act in acts:
+		cur.execute("SELECT TeamName FROM Team Where ActName=?",((act,)))
+		rows = cur.fetchall()
+		teams = []
+
+		for row in rows:
+			teams.append(row[0])
+
+		for team in teams:
+			statusBar.configure(text="Generating " + act + " Team " + str(team,))
+			generateTeam(act,team,dbName)
+
+	
+	cur.close()
+	conn.close()
+
+	statusBar.configure(text="Generated all Team Schedules")
+
+	actToList("Juggling",dbName)
+
 
 #==================================
 #=         Fetch Act Values
@@ -175,8 +211,14 @@ def fetchTeamValues(e):
 
 	output = ""
 	rows = cur.fetchall()
+	counter = 0
 	for row in rows:
-		output += str(row[0]) + "\n"
+		counter += 1
+		if counter <= 2:
+			output += str(row[0]) + "\t"
+		else:
+			output += str(row[0]) + "\n"
+			counter = 0
 	teamMemLabel.configure(text=output)
 
 	cur.execute("SELECT * FROM TeamSchedule WHERE ActName=? AND TeamName=?",(a,t))
@@ -534,8 +576,11 @@ def addNewTeam():
 
 	#Insert New Performer
 	cur.execute("INSERT OR IGNORE INTO Team (TeamName,ActName) VALUES(?,?)",(newTeamNum,teamActCombo.get()))
-
 	conn.commit()
+
+	cur.execute("INSERT OR IGNORE INTO TeamSchedule (TeamName,ActName) VALUES(?,?)",(newTeamNum,teamActCombo.get()))
+	conn.commit()
+
 	cur.close()
 	conn.close()
 
@@ -555,15 +600,98 @@ def removeTeam():
 		conn = sql.connect(dbName)
 		cur = conn.cursor()
 
-		#Insert New Performer
+		#Remove Team
 		cur.execute("DELETE FROM Team WHERE TeamName=? AND ActName=?",(oldTeam,teamActCombo.get()))
-
 		conn.commit()
+
+		cur.execute("DELETE FROM TeamSchedule WHERE TeamName=? AND ActName=?",(oldTeam,teamActCombo.get()))
+		conn.commit()
+
 		cur.close()
 		conn.close()
 
 		statusBar.configure(text="Removed Team " + oldTeam + " from " + teamActCombo.get())
 
+
+#==================================
+#=     Team Save Schedule
+#==================================
+
+def saveTeamSchedule():
+	conn = sql.connect(dbName)
+	cur = conn.cursor()
+
+	#Add all the Schedule checkboxes in
+	cur.execute("UPDATE TeamSchedule SET " + \
+		"TM1=?, TM2=?, TM3=?, TM4=?," + \
+		"TM5=?, TM6=?, TM7=?, TM8=?," + \
+		"TM9=?, TM10=?, TM11=?, TM12=?," + \
+		"TM13=?, TM14=?, TM15=?, TM16=?," + \
+		"TT1=?, TT2=?, TT3=?, TT4=?," + \
+		"TT5=?, TT6=?, TT7=?, TT8=?," + \
+		"TT9=?, TT10=?, TT11=?, TT12=?," + \
+		"TT13=?, TT14=?, TT15=?, TT16=?," + \
+		"TW1=?, TW2=?, TW3=?, TW4=?," + \
+		"TW5=?, TW6=?, TW7=?, TW8=?," + \
+		"TW9=?, TW10=?, TW11=?, TW12=?," + \
+		"TW13=?, TW14=?, TW15=?, TW16=?," + \
+		"TR1=?, TR2=?, TR3=?, TR4=?," + \
+		"TR5=?, TR6=?, TR7=?, TR8=?," + \
+		"TR9=?, TR10=?, TR11=?, TR12=?," + \
+		"TR13=?, TR14=?, TR15=?, TR16=?," + \
+		"TF1=?, TF2=?, TF3=?, TF4=?," + \
+		"TF5=?, TF6=?, TF7=?, TF8=?," + \
+		"TF9=?, TF10=?, TF11=?, TF12=?," + \
+		"TF13=?, TF14=?, TF15=?, TF16=? " + \
+		"WHERE ActName=? AND TeamName=?",(\
+		TM1Result.get(),TM2Result.get(),\
+		TM3Result.get(),TM4Result.get(),\
+		TM5Result.get(),TM6Result.get(),\
+		TM7Result.get(),TM8Result.get(),\
+		TM9Result.get(),TM10Result.get(),\
+		TM11Result.get(),TM12Result.get(),\
+		TM13Result.get(),TM14Result.get(),\
+		TM15Result.get(),TM16Result.get(),\
+		TT1Result.get(),TT2Result.get(),\
+		TT3Result.get(),TT4Result.get(),\
+		TT5Result.get(),TT6Result.get(),\
+		TT7Result.get(),TT8Result.get(),\
+		TT9Result.get(),TT10Result.get(),\
+		TT11Result.get(),TT12Result.get(),\
+		TT13Result.get(),TT14Result.get(),\
+		TT15Result.get(),TT16Result.get(),\
+		TW1Result.get(),TW2Result.get(),\
+		TW3Result.get(),TW4Result.get(),\
+		TW5Result.get(),TW6Result.get(),\
+		TW7Result.get(),TW8Result.get(),\
+		TW9Result.get(),TW10Result.get(),\
+		TW11Result.get(),TW12Result.get(),\
+		TW13Result.get(),TW14Result.get(),\
+		TW15Result.get(),TW16Result.get(),\
+		TR1Result.get(),TR2Result.get(),\
+		TR3Result.get(),TR4Result.get(),\
+		TR5Result.get(),TR6Result.get(),\
+		TR7Result.get(),TR8Result.get(),\
+		TR9Result.get(),TR10Result.get(),\
+		TR11Result.get(),TR12Result.get(),\
+		TR13Result.get(),TR14Result.get(),\
+		TR15Result.get(),TR16Result.get(),\
+		TF1Result.get(),TF2Result.get(),\
+		TF3Result.get(),TF4Result.get(),\
+		TF5Result.get(),TF6Result.get(),\
+		TF7Result.get(),TF8Result.get(),\
+		TF9Result.get(),TF10Result.get(),\
+		TF11Result.get(),TF12Result.get(),\
+		TF13Result.get(),TF14Result.get(),\
+		TF15Result.get(),TF16Result.get(),\
+		teamActCombo.get(), teamCombo.get()))
+
+	conn.commit()
+
+	cur.close()
+	conn.close()
+
+	statusBar.configure(text="Saved Schedule for " + teamActCombo.get() + " Team  " + teamCombo.get())
 
 #==================================
 #=           New File
@@ -883,7 +1011,7 @@ file.add_command(label ='Exit', command = window.destroy)
 #Generate Menu
 gen = Menu(menubar, tearoff = 0)
 menubar.add_cascade(label ='Generate', menu = gen)
-gen.add_command(label ='1 - Generate Team Schedules', command = None)
+gen.add_command(label ='1 - Generate Team Schedules', command = genTeams)
 gen.add_separator()
 gen.add_command(label ='2a - Generate Full Schedules', command = None)
 gen.add_separator()
@@ -999,7 +1127,7 @@ removePerfButton.grid(column=4,row=0,padx=5,pady=0)
 ttk.Label(perfFrame, text="Act 1").grid(column=0, row=1, padx=5, pady=3)
 ttk.Label(perfFrame, text="Act 2").grid(column=1, row=1, padx=5, pady=3)
 ttk.Label(perfFrame, text="Act 3").grid(column=2, row=1, padx=5, pady=3)
-ttk.Label(perfFrame, text="Act 4").grid(column=4, row=1, padx=5, pady=3)
+ttk.Label(perfFrame, text="Act 4").grid(column=3, row=1, padx=5, pady=3)
 ttk.Label(perfFrame, text="Act 5").grid(column=4, row=1, padx=5, pady=3)
 
 #Performer Act Comboboxes
@@ -1018,7 +1146,7 @@ perfAct3Combo.grid(column=2,row=2,padx=5,pady=3)
 perfAct4Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfAct4Combo.configure(values=fetchActs()))
 perfAct4Combo['values'] = fetchActs()
 perfAct4Combo['width'] = 15
-perfAct4Combo.grid(column=4,row=2,padx=5,pady=3)
+perfAct4Combo.grid(column=3,row=2,padx=5,pady=3)
 perfAct5Combo = ttk.Combobox(perfFrame,postcommand=lambda: perfAct5Combo.configure(values=fetchActs()))
 perfAct5Combo['values'] = fetchActs()
 perfAct5Combo['width'] = 15
@@ -1353,7 +1481,12 @@ removeTeamButton.grid(column=5,row=1,padx=5,pady=10)
 #Team Num text
 ttk.Label(teamFrame, text="Team Members:").grid(column=0, row=2, padx=5, pady=10)
 teamMemLabel = Label(teamFrame, text=" ")
-teamMemLabel.grid(column=1, row=2, rowspan=3, padx=5, pady=10)
+teamMemLabel.grid(column=1, columnspan=3, row=2, rowspan=3, padx=5, pady=10)
+
+#save Team Schedule
+saveTeamButton = Button(teamFrame, text='Save Overwrites', command=saveTeamSchedule)
+saveTeamButton.grid(column=5,row=2,padx=5,pady=10)
+
 
 #Generate reminder
 ttk.Label(teamFrame, text="Remember to Generate Team Schedules").grid(column=2, columnspan=3,row=5, padx=10, pady=5)
