@@ -56,7 +56,7 @@ def condenseList(input):
 
 #Returns true if there is a match, false if not
 def compareList(list1, list2):
-	print(list2)
+	return False
 	if any(isinstance(i,int) for i in list1):
 		if len(set(list1).intersection(set(list2))) >0:
 			return True

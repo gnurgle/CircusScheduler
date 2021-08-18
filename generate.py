@@ -1,5 +1,6 @@
 import sqlite3 as sql
 from test import recurListComp
+import time
 
 def generateTeam(actName, teamName, dbFile):
 
@@ -151,13 +152,6 @@ def actToList(actName,dbName):
 
 	#Initialize outputs
 	output = []
-	#for i in range(0,80):
-	#	output.append([])
-
-	#teamsSched = []
-	#for i in range(0,len(rows[0])):
-	#	teamsSched.append(0)
-
 	
 	#Pull Schedules
 	for row in rows:
@@ -165,15 +159,17 @@ def actToList(actName,dbName):
 			(actName,row[0]))
 		templist = cur.fetchall()
 		tempsched = []
-		for item in templist:
+		for item in templist[0]:
 			tempsched.append(item)
 		tempList = scheduleToList(tempsched[2:])
-		output.append([tempList])
-
-	print(output)
+		output.append(tempList)
+	start = time.time()
 	test = recurListComp(output[0],output[1:])
-	print (len(test))
-	print (test)
+	end=time.time()-start
+
+	print ("Time Elapsed: " + str(end) + " seconds")
+	print ("Num of possibilities: " + str(len(test)))
+	print (test[5:50])
 
 def recursiveChecker():
 	pass
@@ -183,7 +179,6 @@ def recursiveChecker():
 #to represent the position of possibilities
 def scheduleToList(schedule):
 
-	print(schedule)
 	positionList = []
 	output = []
 
