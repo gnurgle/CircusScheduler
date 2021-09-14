@@ -29,6 +29,7 @@ def generateTeam(actName, teamName, dbFile):
 
 	#Pull and sum schedule for all performers
 	for name in perfNames:
+		print(name)
 		cur.execute("SELECT * FROM Schedule WHERE PerfName=?",(name,))
 		rows = cur.fetchall()
 		for i in range(1,81):
